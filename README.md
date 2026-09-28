@@ -1,30 +1,44 @@
 # bluebug-scraping
 
-Scrape of the first 100 books from books.toscrape.com, pages 1 to 5. Output is in books.csv.
+# Results (100 books, pages 1-5)
 
-## SQL answers
+## 1. Average price per rating
 
-Loaded books.csv into SQLite with db.py. Queries are in queries.sql.
+| rating | avg_price | n |
+|---|---|---|
+| 1 | 35.52 | 22 |
+| 2 | 35.91 | 19 |
+| 3 | 36.84 | 22 |
+| 4 | 33.98 | 18 |
+| 5 | 30.01 | 19 |
 
-1. Average price for each rating:
+## 2. Top 5 most expensive, rating 4-5
 
-rating 1: 35.52 (22 books)
-rating 2: 35.91 (19 books)
-rating 3: 36.84 (22 books)
-rating 4: 33.98 (18 books)
-rating 5: 30.01 (19 books)
+| title | price | rating |
+|---|---|---|
+| The Death of Humanity: and the Case for Life | 58.11 | 4 |
+| The Past Never Ends | 56.50 | 4 |
+| Sapiens: A Brief History of Humankind | 54.23 | 5 |
+| Scott Pilgrim's Precious Little Life (Scott Pilgrim #1) | 52.29 | 5 |
+| Behind Closed Doors | 52.22 | 4 |
 
-2. The 5 most expensive books rated 4 or 5:
+## 3. Out of stock per rating
 
-The Death of Humanity: and the Case for Life - 58.11 - rating 4
-The Past Never Ends - 56.50 - rating 4
-Sapiens: A Brief History of Humankind - 54.23 - rating 5
-Scott Pilgrim's Precious Little Life (Scott Pilgrim #1) - 52.29 - rating 5
-Behind Closed Doors - 52.22 - rating 4
+No rows - 0 books out of stock in the first 100. All `in_stock` values are `true`.
+The query used:
 
-3. How many books are out of stock, per rating:
+```sql
+SELECT rating, COUNT(*) FROM books WHERE in_stock = 'false' GROUP BY rating;
+```
 
-None. All 100 books are in stock, so the out of stock count is 0 for every rating.
+How to run it yourself:
+
+```
+python scrape.py
+python db.py
+sqlite3 books.db < queries.sql
+```
+
 
 ## Notes
 
